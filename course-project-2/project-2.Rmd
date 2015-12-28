@@ -6,7 +6,49 @@ author: "Rajesh Thallam"
 output: html_document
 ---
 
+### Overview
+
 In the second part of the project, we analyze the ToothGrowth data in the R datasets package. The data is set of 60 observations, length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1 and 2 mg) with each of two delivery methods (orange juice or ascorbic acid).
+
+### Exploratory Data Analysis
+
+The ToothGrowth data set explains the relation between the growth of teeth of guinea pigs at each of three dose levels of Vitamin C with each of the two delivery methods of orange juice and ascorbic acid. In this section, I first load the data set and then look at the variables in the data set.
+
+```{r, echo=TRUE}
+library(datasets)
+data(ToothGrowth)
+str(ToothGrowth)
+```
+
+So, the data set has 3 variables (len, supp, and dose which are numeric, factor, and numeric variables, respectively) and 60 observations. For each of the two causal factors supp and dose.
+
+```{r, echo=TRUE}
+unique(ToothGrowth$supp)
+unique(ToothGrowth$dose)
+```
+
+Let's convert the variable dose from numeric to factor. The following code takes care of this conversion and presents the new transformed data set.
+
+```{r, echo=TRUE}
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+str(ToothGrowth)
+```
+
+Looking at the basic summary of the data in the data set
+
+```{r, echo=TRUE}
+summary(ToothGrowth)
+```
+
+The above output provides the summary statistics for all of the variables in the data set. In the following section, I provide the summary of the data for each combination of dose level and delivery method.
+
+```{r, echo=TRUE}
+by(ToothGrowth$len, INDICES = list(ToothGrowth$supp, ToothGrowth$dose), summary)
+```
+
+### Hypothesis Testing
+
+Evaluating the effects of delivery methods on tooth growth at different levels of Vitamin C dosage
 
 ```{r p2_plot1, echo=TRUE}
 library(datasets)

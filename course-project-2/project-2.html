@@ -66,7 +66,77 @@ img {
 </div>
 
 
+<div id="overview" class="section level3">
+<h3>Overview</h3>
 <p>In the second part of the project, we analyze the ToothGrowth data in the R datasets package. The data is set of 60 observations, length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1 and 2 mg) with each of two delivery methods (orange juice or ascorbic acid).</p>
+</div>
+<div id="exploratory-data-analysis" class="section level3">
+<h3>Exploratory Data Analysis</h3>
+<p>The ToothGrowth data set explains the relation between the growth of teeth of guinea pigs at each of three dose levels of Vitamin C with each of the two delivery methods of orange juice and ascorbic acid. In this section, I first load the data set and then look at the variables in the data set.</p>
+<pre class="r"><code>library(datasets)
+data(ToothGrowth)
+str(ToothGrowth)</code></pre>
+<pre><code>## 'data.frame':    60 obs. of  3 variables:
+##  $ len : num  4.2 11.5 7.3 5.8 6.4 10 11.2 11.2 5.2 7 ...
+##  $ supp: Factor w/ 2 levels &quot;OJ&quot;,&quot;VC&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ dose: num  0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 ...</code></pre>
+<p>So, the data set has 3 variables (len, supp, and dose which are numeric, factor, and numeric variables, respectively) and 60 observations. For each of the two causal factors supp and dose.</p>
+<pre class="r"><code>unique(ToothGrowth$supp)</code></pre>
+<pre><code>## [1] VC OJ
+## Levels: OJ VC</code></pre>
+<pre class="r"><code>unique(ToothGrowth$dose)</code></pre>
+<pre><code>## [1] 0.5 1.0 2.0</code></pre>
+<p>Let’s convert the variable dose from numeric to factor. The following code takes care of this conversion and presents the new transformed data set.</p>
+<pre class="r"><code>ToothGrowth$dose &lt;- as.factor(ToothGrowth$dose)
+str(ToothGrowth)</code></pre>
+<pre><code>## 'data.frame':    60 obs. of  3 variables:
+##  $ len : num  4.2 11.5 7.3 5.8 6.4 10 11.2 11.2 5.2 7 ...
+##  $ supp: Factor w/ 2 levels &quot;OJ&quot;,&quot;VC&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ dose: Factor w/ 3 levels &quot;0.5&quot;,&quot;1&quot;,&quot;2&quot;: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p>Looking at the basic summary of the data in the data set</p>
+<pre class="r"><code>summary(ToothGrowth)</code></pre>
+<pre><code>##       len        supp     dose   
+##  Min.   : 4.20   OJ:30   0.5:20  
+##  1st Qu.:13.07   VC:30   1  :20  
+##  Median :19.25           2  :20  
+##  Mean   :18.81                   
+##  3rd Qu.:25.27                   
+##  Max.   :33.90</code></pre>
+<p>The above output provides the summary statistics for all of the variables in the data set. In the following section, I provide the summary of the data for each combination of dose level and delivery method.</p>
+<pre class="r"><code>by(ToothGrowth$len, INDICES = list(ToothGrowth$supp, ToothGrowth$dose), summary)</code></pre>
+<pre><code>## : OJ
+## : 0.5
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    8.20    9.70   12.25   13.23   16.18   21.50 
+## -------------------------------------------------------- 
+## : VC
+## : 0.5
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    4.20    5.95    7.15    7.98   10.90   11.50 
+## -------------------------------------------------------- 
+## : OJ
+## : 1
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   14.50   20.30   23.45   22.70   25.65   27.30 
+## -------------------------------------------------------- 
+## : VC
+## : 1
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   13.60   15.27   16.50   16.77   17.30   22.50 
+## -------------------------------------------------------- 
+## : OJ
+## : 2
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   22.40   24.58   25.95   26.06   27.08   30.90 
+## -------------------------------------------------------- 
+## : VC
+## : 2
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   18.50   23.38   25.95   26.14   28.80   33.90</code></pre>
+</div>
+<div id="hypothesis-testing" class="section level3">
+<h3>Hypothesis Testing</h3>
+<p>Evaluating the effects of delivery methods on tooth growth at different levels of Vitamin C dosage</p>
 <pre class="r"><code>library(datasets)
 library(ggplot2)
 ggplot(data=ToothGrowth, aes(x=as.factor(dose), y=len, fill=supp)) +
@@ -85,33 +155,36 @@ summary(fit)</code></pre>
 ## 
 ## Residuals:
 ##    Min     1Q Median     3Q    Max 
-## -6.600 -3.700  0.373  2.116  8.800 
+## -7.085 -2.751 -0.800  2.446  9.650 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   9.2725     1.2824   7.231 1.31e-09 ***
-## dose          9.7636     0.8768  11.135 6.31e-16 ***
-## suppVC       -3.7000     1.0936  -3.383   0.0013 ** 
+## (Intercept)  12.4550     0.9883  12.603  &lt; 2e-16 ***
+## dose1         9.1300     1.2104   7.543 4.38e-10 ***
+## dose2        15.4950     1.2104  12.802  &lt; 2e-16 ***
+## suppVC       -3.7000     0.9883  -3.744 0.000429 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 4.236 on 57 degrees of freedom
-## Multiple R-squared:  0.7038, Adjusted R-squared:  0.6934 
-## F-statistic: 67.72 on 2 and 57 DF,  p-value: 8.716e-16</code></pre>
+## Residual standard error: 3.828 on 56 degrees of freedom
+## Multiple R-squared:  0.7623, Adjusted R-squared:  0.7496 
+## F-statistic: 59.88 on 3 and 56 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The model explains 70% of the variance in the data.</p>
 <ul>
-<li>The intercept is 9.2725, meaning that with no supplement of Vitamin C, the average tooth length is 9.2725 units.</li>
-<li>The coefficient of dose is 9.7635714. It can be interpreted as increasing the delievered dose 1 mg, all else equal (i.e. no change in the supplement type), would increase the tooth length 9.7635714 units.</li>
-<li>The last coefficient is for the supplement type. Since the supplement type is a categorical variable, dummy variables are used. The computed coefficient is for suppVC and the value is -3.7 meaning that delivering a given dose as ascorbic acid, without changing the dose, would result in 3.7 units of decrease in the tooth length. Since there are only two categories, we can also conclude that on average, delivering the dosage as orange juice would increase the tooth length by 3.7 units.</li>
+<li>The intercept is 12.455, meaning that with no supplement of Vitamin C, the average tooth length is 12.455 units.</li>
+<li>The coefficient of dose is 9.13. It can be interpreted as increasing the delievered dose 1 mg, all else equal (i.e. no change in the supplement type), would increase the tooth length 9.13 units.</li>
+<li>The last coefficient is for the supplement type. Since the supplement type is a categorical variable, dummy variables are used. The computed coefficient is for suppVC and the value is 15.495 meaning that delivering a given dose as ascorbic acid, without changing the dose, would result in 15.495 units of decrease in the tooth length. Since there are only two categories, we can also conclude that on average, delivering the dosage as orange juice would increase the tooth length by 15.495 units.</li>
 </ul>
 <p>95% confidence intervals for two variables and the intercept are as follows.</p>
 <pre class="r"><code>confint(fit)</code></pre>
 <pre><code>##                 2.5 %    97.5 %
-## (Intercept)  6.704608 11.840392
-## dose         8.007741 11.519402
-## suppVC      -5.889905 -1.510095</code></pre>
+## (Intercept) 10.475238 14.434762
+## dose1        6.705297 11.554703
+## dose2       13.070297 17.919703
+## suppVC      -5.679762 -1.720238</code></pre>
 <p>The confidence intervals mean that if we collect a different set of data and estimate parameters of the linear model many times, 95% of the time, the coefficient estimations will be in these ranges.</p>
 <p>For each coefficient (i.e. intercept, dose and suppVC), the null hypothesis is that the coefficients are zero, meaning that no tooth length variation is explained by that variable. All p-values are less than 0.05, rejecting the null hypothesis and suggesting that each variable explains a significant portion of variability in tooth length, assuming the significance level is 5%.</p>
+</div>
 
 
 </div>
