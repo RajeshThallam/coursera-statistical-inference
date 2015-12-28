@@ -28,7 +28,7 @@ summary(fit)
 
 The model explains 70% of the variance in the data. 
 
-- The intercept is `r fit$coefficients[[1]]`, meaning that with no supplement of Vitamin C, the average tooth length is r fit$coefficients[[1]] units. 
+- The intercept is `r fit$coefficients[[1]]`, meaning that with no supplement of Vitamin C, the average tooth length is `r fit$coefficients[[1]]` units. 
 - The coefficient of dose is `r fit$coefficients[[2]]`. It can be interpreted as increasing the delievered dose 1 mg, all else equal (i.e. no change in the supplement type), would increase the tooth length `r fit$coefficients[[2]]` units. 
 - The last coefficient is for the supplement type. Since the supplement type is a categorical variable, dummy variables are used. The computed coefficient is for suppVC and the value is `r fit$coefficients[[3]]` meaning that delivering a given dose as ascorbic acid, without changing the dose, would result in `r abs(fit$coefficients[[3]])` units of decrease in the tooth length. Since there are only two categories, we can also conclude that on average, delivering the dosage as orange juice would increase the tooth length by `r abs(fit$coefficients[[3]])` units.
 
